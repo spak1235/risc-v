@@ -31,19 +31,19 @@ module alu(
     
     always@(*) begin
         case(sel)
-        4'h0: t_rslt <= in1 + in2;
-        4'h1: t_rslt <= in1 - in2;
-        4'h2: t_rslt <= in1 ^ in2;
-        4'h3: t_rslt <= in1 | in2;
-        4'h4: t_rslt <= in1 & in2;
-        4'h5: t_rslt <= in1 << in2[4:0];
-        4'h6: t_rslt <= in1 >> in2[4:0];
-        4'h7: t_rslt <= $signed(in1) >>> in2[4:0];
-        4'h8: t_rslt <= ($signed(in1) < $signed(in2)) ? 32'd1 : 32'd0;
-        4'h9: t_rslt <= (in1 < in2) ? 32'd1 : 32'd0;
-        4'hA: t_rslt <= in2;
-        4'hB: t_rslt <= 32'hXXXXXXXX;
-        default: t_rslt <= rslt;
+        4'h0: t_rslt = in1 + in2;
+        4'h1: t_rslt = in1 - in2;
+        4'h2: t_rslt = in1 ^ in2;
+        4'h3: t_rslt = in1 | in2;
+        4'h4: t_rslt = in1 & in2;
+        4'h5: t_rslt = in1 << in2[4:0];
+        4'h6: t_rslt = in1 >> in2[4:0];
+        4'h7: t_rslt = $signed(in1) >>> in2[4:0];
+        4'h8: t_rslt = ($signed(in1) < $signed(in2)) ? 32'd1 : 32'd0;
+        4'h9: t_rslt = (in1 < in2) ? 32'd1 : 32'd0;
+        4'hA: t_rslt = in2;
+        4'hB: t_rslt = 32'hXXXXXXXX;
+        default: t_rslt = rslt;
         endcase
     end
     

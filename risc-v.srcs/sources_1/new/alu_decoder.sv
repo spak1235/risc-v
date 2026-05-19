@@ -80,18 +80,7 @@ module alu_decoder(
                 endcase
             end
 
-            7'b1100011: begin
-                case (funct3)
-                    3'b000: temp_alusel = 4'h1;
-                    3'b001: temp_alusel = 4'h1;
-                    3'b100: temp_alusel = 4'h8;
-                    3'b101: temp_alusel = 4'h8;
-                    3'b110: temp_alusel = 4'h9;
-                    3'b111: temp_alusel = 4'h9;
-                    default: temp_alusel = 4'hX;
-                endcase
-            end
-
+            7'b1100011: temp_alusel = 4'h0;
             7'b1101111: temp_alusel = 4'h0;
             7'b1100111: temp_alusel = 4'h0;
             7'b0110111: temp_alusel = 4'hA;

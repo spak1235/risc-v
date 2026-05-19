@@ -28,6 +28,7 @@ module control_unit(
     output [2:0] immsel,
     output regwen,
     output bsel,
+    output asel,
     output [3:0] alusel,
     output memrw,
     output [1:0] wbsel
@@ -57,5 +58,7 @@ module control_unit(
     assign wbsel = (opcode == 7'b0000011) ? 2'b01 :
     (opcode == 7'b1101111 || opcode == 7'b1100111) ? 2'b10 :
     2'b00;
+    
+    assign asel = (opcode == 7'b0010111 || opcode == 7'b1100011 || opcode == 7'b1101111) ? 1'b1 : 1'b0;
 
 endmodule
