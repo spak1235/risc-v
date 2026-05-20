@@ -32,7 +32,7 @@ module regfile(
     
     reg [31:0] regs [31:0];
     
-    always@(posedge clk) begin
+    always@(negedge clk) begin
         if(regwen && addrD != 5'd0) begin
             regs[addrD] <= wb;
         end

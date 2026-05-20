@@ -22,16 +22,17 @@
 
 module control_unit(
     input [31:0] instr,
-    input taken_branch,
+    //input taken_branch,
 
-    output pcsel,
+    //output pcsel,
     output [2:0] immsel,
     output regwen,
     output bsel,
     output asel,
     output [3:0] alusel,
     output memrw,
-    output [1:0] wbsel
+    output [1:0] wbsel,
+    output memread
 );
 
     wire [6:0] opcode = instr[6:0];
@@ -40,7 +41,7 @@ module control_unit(
 
     alu_decoder aludecoder(opcode, funct3, funct7, alusel);
 
-    assign pcsel = (opcode == 7'b1101111 || opcode == 7'b1100111) ? 1'b1 : (opcode == 7'b1100011) ? taken_branch : 1'b0;
+    //assign pcsel = (opcode == 7'b1101111 || opcode == 7'b1100111) ? 1'b1 : (opcode == 7'b1100011) ? taken_branch : 1'b0;
 
     assign immsel = (opcode == 7'b0000011 || opcode == 7'b0010011 || opcode == 7'b1100111) ? 3'b000 :
     (opcode == 7'b0100011) ? 3'b001 :
@@ -60,5 +61,7 @@ module control_unit(
     2'b00;
     
     assign asel = (opcode == 7'b0010111 || opcode == 7'b1100011 || opcode == 7'b1101111) ? 1'b1 : 1'b0;
+    
+    assign memread = (opcode == 7'b0000011) ? 1'b1 : 1'b0;
 
 endmodule

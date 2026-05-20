@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 05/18/2026 11:34:45 AM
+// Create Date: 05/19/2026 04:12:34 PM
 // Design Name: 
-// Module Name: pc
+// Module Name: IfId
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,21 +20,30 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module pc(
+module IfId(
     input clk, rst,
-    input pc_write,
-    input [31:0] next_pc,
+    input [31:0] pc_out,
+    input [31:0] pc_add,
+    input [31:0] instr,
+    input IfId_write,
     
-    output reg [31:0] pc
+    output reg [31:0] IfId_pc_out,
+    output reg [31:0] IfId_pc_add,
+    output reg [31:0] IfId_instr
     );
     
     always@(posedge clk) begin
         if(rst) begin
-            pc <= 32'd0;
+            IfId_pc_out <= 32'd0;
+            IfId_pc_add <= 32'd0;
+            IfId_instr <= 32'h00000013;
         end
         else begin
-            if(pc_write)
-            pc <= next_pc;
+            if(IfId_write) begin
+                IfId_pc_out <= pc_out;
+                IfId_pc_add <= pc_add;
+                IfId_instr <= instr;
+            end
         end
     end
     

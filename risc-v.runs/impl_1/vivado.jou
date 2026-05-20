@@ -1,0 +1,24 @@
+#-----------------------------------------------------------
+# Vivado v2025.2 (64-bit)
+# SW Build 6299465 on Fri Nov 14 12:34:56 MST 2025
+# IP Build 6300035 on Fri Nov 14 10:48:45 MST 2025
+# SharedData Build 6298862 on Thu Nov 13 04:50:51 MST 2025
+# Start of session at: Tue May 19 15:59:39 2026
+# Process ID         : 29986
+# Current directory  : /home/sohan/risc-v/risc-v.runs/impl_1
+# Command line       : vivado -log topmodule.vdi -applog -product Vivado -messageDb vivado.pb -mode batch -source topmodule.tcl -notrace
+# Log file           : /home/sohan/risc-v/risc-v.runs/impl_1/topmodule.vdi
+# Journal file       : /home/sohan/risc-v/risc-v.runs/impl_1/vivado.jou
+# Running On         : sohan
+# Platform           : Ubuntu
+# Operating System   : Ubuntu 22.04.5 LTS
+# Processor Detail   : 13th Gen Intel(R) Core(TM) i7-13700HX
+# CPU Frequency      : 1251.846 MHz
+# CPU Physical cores : 16
+# CPU Logical cores  : 24
+# Host memory        : 16444 MB
+# Swap memory        : 17179 MB
+# Total Virtual      : 33624 MB
+# Available Virtual  : 26920 MB
+#-----------------------------------------------------------
+source topmodule.tcl -notrace
