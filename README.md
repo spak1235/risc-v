@@ -1,48 +1,138 @@
-# 5-Stage Pipelined RV32I RISC-V Processor
+# 5-Stage Pipelined RV32I RISC-V Processor with Dynamic Branch Prediction
 
-A fully functional 32-bit 5-stage pipelined RISC-V CPU designed and implemented in Verilog HDL.  
-The processor supports pipelined execution, hazard handling, memory operations, and control flow instructions following the RV32I ISA specification.
+A fully functional 32-bit 5-stage pipelined RISC-V processor designed and implemented in Verilog HDL.  
+The processor supports pipelined execution, hazard handling, dynamic branch prediction, speculative execution, and memory operations following the RV32I ISA specification.
 
 ---
 
 # Features
 
-- 5-stage pipeline architecture
-  - Instruction Fetch (IF)
-  - Instruction Decode (ID)
-  - Execute (EX)
-  - Memory Access (MEM)
-  - Write Back (WB)
+## 5-Stage Pipeline Architecture
 
-- RV32I Instruction Support
-  - Arithmetic Instructions
-  - Logical Instructions
-  - Immediate Instructions
-  - Load/Store Instructions
-  - Branch Instructions
-  - Jump Instructions
+- Instruction Fetch (IF)
+- Instruction Decode (ID)
+- Execute (EX)
+- Memory Access (MEM)
+- Write Back (WB)
 
-- Hazard Handling
-  - Data Forwarding
-  - Load-Use Hazard Stalling
-  - Branch and Jump Flushing
-  - Store Data Forwarding
+---
 
-- Pipeline Components
-  - IF/ID Register
-  - ID/EX Register
-  - EX/MEM Register
-  - MEM/WB Register
+# RV32I Instruction Support
 
-- Additional Modules
-  - Control Unit
-  - ALU Decoder
-  - Immediate Generator
-  - Register File
-  - Instruction Memory
-  - Data Memory
-  - Hazard Detection Unit
-  - Forwarding Unit
+## Arithmetic Instructions
+
+```assembly
+add
+sub
+addi
+slt
+sltu
+```
+
+## Logical Instructions
+
+```assembly
+and
+or
+xor
+sll
+srl
+sra
+```
+
+## Memory Instructions
+
+```assembly
+lw
+sw
+```
+
+## Control Flow Instructions
+
+```assembly
+beq
+bne
+blt
+bge
+jal
+jalr
+```
+
+---
+
+# Hazard Handling
+
+## Data Hazard Resolution
+
+Implemented using:
+- EX/MEM Forwarding
+- MEM/WB Forwarding
+- Store Data Forwarding
+
+## Load-Use Hazard Detection
+
+Implemented using:
+- Pipeline Stalling
+- PC Freeze
+- IF/ID Freeze
+- Bubble Injection into ID/EX
+
+## Control Hazard Handling
+
+Implemented using:
+- Pipeline Flush Logic
+- Branch Recovery Mechanism
+- Speculative Fetch Cancellation
+
+---
+
+# Dynamic Branch Prediction
+
+The processor implements dynamic branch prediction to reduce branch penalties and improve pipeline performance.
+
+## Branch Prediction Components
+
+### Branch Prediction Buffer (BPB)
+
+- 2-bit saturating branch predictor
+- Dynamically learns branch behavior
+- Uses per-branch prediction states
+
+### Branch Target Buffer (BTB)
+
+- Stores predicted target addresses
+- Includes valid bits and tag matching
+- Prevents false target predictions caused by aliasing
+
+### Speculative Execution
+
+- Predicted target instructions are fetched before branch resolution
+- Incorrect predictions trigger pipeline flush and recovery
+
+---
+
+# Pipeline Registers
+
+- IF/ID Register
+- ID/EX Register
+- EX/MEM Register
+- MEM/WB Register
+
+---
+
+# Additional Modules
+
+- Control Unit
+- ALU Decoder
+- Immediate Generator
+- Register File
+- Instruction Memory
+- Data Memory
+- Hazard Detection Unit
+- Forwarding Unit
+- Branch Comparator
+- Branch Prediction Buffer (BPB)
+- Branch Target Buffer (BTB)
 
 ---
 
@@ -52,62 +142,29 @@ The processor supports pipelined execution, hazard handling, memory operations, 
 IF -> ID -> EX -> MEM -> WB
 ```
 
-The processor implements a classic pipelined datapath with hazard mitigation mechanisms to ensure correct execution under data and control dependencies.
+The processor implements a classic pipelined datapath with hazard mitigation and speculative control flow execution.
 
 ---
 
-# Hazard Handling
+# Branch Prediction Architecture
 
-## Data Hazards
-Resolved using:
-- EX/MEM Forwarding
-- MEM/WB Forwarding
-
-## Load-Use Hazards
-Resolved using:
-- Stall Detection Unit
-- PC Freeze
-- IF/ID Freeze
-- Bubble Injection into ID/EX
-
-## Control Hazards
-Resolved using:
-- Pipeline Flushing on Branches and Jumps
-
----
-
-# Supported Instructions
-
-## Arithmetic Instructions
-```assembly
-add
-sub
-addi
-```
-
-## Logical Instructions
-```assembly
-and
-or
-xor
-sll
-srl
-sra
-slt
-sltu
-```
-
-## Memory Instructions
-```assembly
-lw
-sw
-```
-
-## Control Flow Instructions
-```assembly
-beq
-jal
-jalr
+```text
+PC
+ │
+ ▼
+BTB + BPB
+ │
+ ▼
+Predicted Next PC
+ │
+ ▼
+Pipeline Fetch
+ │
+ ▼
+Branch Resolution in EX Stage
+ │
+ ├── Correct Prediction  -> Continue
+ └── Misprediction       -> Flush + Redirect PC
 ```
 
 ---
@@ -119,25 +176,44 @@ addi x1, x0, 5
 addi x2, x0, 10
 add  x3, x1, x2
 sub  x4, x2, x1
-lw   x7, 0(x0)
-sw   x5, 0(x0)
+
+lw   x5, 0(x0)
+sw   x5, 4(x0)
+
 beq  x1, x2, label
+bne  x3, x4, loop
+
 jal  x0, target
+jalr x0, x1, 0
 ```
 
 ---
 
-# Future Improvements
+# Verification and Testing
 
-- Branch Prediction
-- Cache Integration
-- Exception and Interrupt Handling
-- FPGA Deployment
-- UART Peripheral Integration
-- Performance Optimization
+The processor was verified using custom Verilog testbenches covering:
+
+- Arithmetic operations
+- Memory operations
+- Data hazards
+- Forwarding paths
+- Load-use stalls
+- Branch hazards
+- Branch prediction training
+- BTB hit/miss behavior
+- Pipeline flush recovery
+- Nested and loop branches
 
 ---
 
 # Project Status
 
-Completed implementation of a fully hazard-aware 5-stage pipelined RV32I processor with forwarding, stalling, flushing, and memory support.
+Completed implementation of a fully hazard-aware 5-stage pipelined RV32I processor featuring:
+
+- Forwarding
+- Stalling
+- Pipeline Flushing
+- Dynamic Branch Prediction
+- BTB-based Target Prediction
+- 2-bit Saturating BPB
+- Speculative Fetch and Recovery
