@@ -43,7 +43,7 @@ module alu(
         4'h9: t_rslt = (in1 < in2) ? 32'd1 : 32'd0;
         4'hA: t_rslt = in2;
         4'hB: t_rslt = 32'hXXXXXXXX;
-        default: t_rslt = rslt;
+        default: t_rslt = 32'd0;
         endcase
     end
     

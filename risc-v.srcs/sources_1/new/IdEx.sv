@@ -34,6 +34,8 @@ module IdEx(
     input [1:0] wbsel,
     input branch, jump,
     input memread,
+    input pred_taken,
+    input [31:0] pred_target,
     
     output reg [31:0] IdEx_dataA, IdEx_dataB,
     output reg [31:0] IdEx_imm_instr,
@@ -46,7 +48,9 @@ module IdEx(
     output reg IdEx_memrw,
     output reg [1:0] IdEx_wbsel,
     output reg IdEx_branch, IdEx_jump,
-    output reg IdEx_memread
+    output reg IdEx_memread,
+    output reg IdEx_pred_taken,
+    output reg [31:0] IdEx_pred_target
     );
     
     always@(posedge clk) begin
@@ -69,7 +73,8 @@ module IdEx(
             IdEx_branch <= 1'b0;
             IdEx_jump <= 1'b0;
             IdEx_memread <= 1'b0;
-            
+            IdEx_pred_taken <= 1'b0;
+            IdEx_pred_target <= 32'd0;
         end
         else begin
             IdEx_dataA <= dataA;
@@ -90,6 +95,8 @@ module IdEx(
             IdEx_branch <= branch;
             IdEx_jump <= jump;
             IdEx_memread <= memread;
+            IdEx_pred_taken <= pred_taken;
+            IdEx_pred_target <= pred_target;
         end
     end
 
