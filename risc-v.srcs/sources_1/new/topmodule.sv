@@ -21,7 +21,9 @@
 
 
 module topmodule(
-    input clk, rst
+    input clk, rst,
+    
+    output [31:0] rout
     );
     
     //information fetch initialisation
@@ -192,5 +194,7 @@ module topmodule(
     
     //control_unit
     control_unit control_unit(IfId_instr, immsel, regwen, bsel, asel, alusel, memrw, wbsel, memread);
+    
+    assign rout = wb;
     
 endmodule
