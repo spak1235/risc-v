@@ -28,6 +28,7 @@ module MaWb(
     input [31:0] pc_add,
     input [1:0] wbsel,
     input regwen,
+    input MaWb_write,
     
     output reg [4:0] MaWb_addrd,
     output reg [31:0] MaWb_datar,
@@ -48,12 +49,14 @@ module MaWb(
             
         end
         else begin
-            MaWb_addrd <= addrd;
-            MaWb_datar <= datar;
-            MaWb_alu_output <= alu_output;
-            MaWb_pc_add <= pc_add;
-            MaWb_wbsel <= wbsel;
-            MaWb_regwen <= regwen;
+            if(MaWb_write) begin
+                MaWb_addrd <= addrd;
+                MaWb_datar <= datar;
+                MaWb_alu_output <= alu_output;
+                MaWb_pc_add <= pc_add;
+                MaWb_wbsel <= wbsel;
+                MaWb_regwen <= regwen;
+            end
         end
     end
     

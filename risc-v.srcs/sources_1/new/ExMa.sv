@@ -35,6 +35,7 @@ module ExMa(
     input memread,
     input pred_taken,
     input [31:0] pred_target,
+    input ExMa_write,
     
     output reg [31:0] ExMa_alu_output,
     output reg [31:0] ExMa_datab,
@@ -68,19 +69,21 @@ module ExMa(
             ExMa_pred_target <= 32'd0;
         end
         else begin
-            ExMa_alu_output <= alu_output;
-            ExMa_datab <= datab;
-            ExMa_memrw <= memrw;
-            ExMa_addrd <= addrd;
-            ExMa_regwen <= regwen;
-            ExMa_pc_add <= pc_add;
-            ExMa_pc_out <= pc_out;
-            ExMa_wbsel <= wbsel;
-            ExMa_taken_branch <= taken_branch;
-            ExMa_branch <= branch;
-            ExMa_memread <= memread;
-            ExMa_pred_taken <= pred_taken;
-            ExMa_pred_target <= pred_target;
+            if(ExMa_write) begin
+                ExMa_alu_output <= alu_output;
+                ExMa_datab <= datab;
+                ExMa_memrw <= memrw;
+                ExMa_addrd <= addrd;
+                ExMa_regwen <= regwen;
+                ExMa_pc_add <= pc_add;
+                ExMa_pc_out <= pc_out;
+                ExMa_wbsel <= wbsel;
+                ExMa_taken_branch <= taken_branch;
+                ExMa_branch <= branch;
+                ExMa_memread <= memread;
+                ExMa_pred_taken <= pred_taken;
+                ExMa_pred_target <= pred_target;
+            end
         end
     end
 endmodule

@@ -42,7 +42,8 @@ module topmodule(
     wire [31:0] btb_out;
     wire [31:0] f_pc;
     wire [31:0] pf_pc;
-    wire hit;
+    wire btb_hit;
+    wire icache_hit;
 
     wire [31:0] predicted_pc;
     wire [31:0] resolved_pc;
@@ -65,6 +66,7 @@ module topmodule(
     wire [31:0] bsel_out;
     wire memread;
     //information excecute intialisation
+    wire IdEx_write;
     wire [31:0] IdEx_dataA, IdEx_dataB;
     wire [31:0] IdEx_imm_instr;
     wire [31:0] IdEx_pc_out, IdEx_pc_add;
@@ -91,6 +93,7 @@ module topmodule(
 
     wire [1:0] forwardA, forwardB;
     //memory access initialisation
+    wire ExMa_write;
     wire [31:0] ExMa_alu_output;
     wire [31:0] ExMa_datab;
     wire ExMa_memrw;
@@ -104,16 +107,20 @@ module topmodule(
     wire ExMa_pred_taken;
     wire [31:0] ExMa_pred_target;
     wire ExMa_memread;
-    
+    wire dcache_hit;
+
     wire [31:0] dataR;
     wire memrw;
     //write back initialisation
+    wire MaWb_write;
     wire [4:0] MaWb_addrd;
     wire [31:0] MaWb_datar;
     wire [31:0] MaWb_alu_output;
     wire [31:0] MaWb_pc_add;
     wire [1:0] MaWb_wbsel;
     wire MaWb_regwen;
+    
+    wire cache_stall;
     
     wire [1:0] wbsel;
     
@@ -126,14 +133,18 @@ module topmodule(
     assign forwardB_ma = MaWb_regwen && (MaWb_addrd != 5'd0) && (IdEx_addrb==MaWb_addrd);
     assign forwardA = (forwardA_ex) ? 2'b01 : (forwardA_ma) ? 2'b10 : 2'b00;
     assign forwardB = (forwardB_ex) ? 2'b01 : (forwardB_ma) ? 2'b10 : 2'b00;
-    
+
+    assign cache_stall = !icache_hit || ((!dcache_hit)&&((ExMa_wbsel==2'b01)||(ExMa_memrw==1'b1)));     
     assign stall = (IdEx_memread && ((IdEx_addrd == IfId_instr[19:15]) || (IdEx_addrd == IfId_instr[24:20])) && (IdEx_addrd != 5'd0)); 
-    assign pc_write = !stall;
-    assign IfId_write = !stall;
+    assign pc_write = (!stall)&&(!cache_stall);
+    assign IfId_write = (!stall)&&(!cache_stall);
+    assign IdEx_write = (!cache_stall);
+    assign ExMa_write = (!cache_stall);
+    assign MaWb_write = (!cache_stall);
     
     //information fetch
 
-    mux2 pred_pc(pc_add, btb_out, hit && branch_pred, next_pc);
+    mux2 pred_pc(pc_add, btb_out, btb_hit && branch_pred, next_pc);
 
     mux2 correct_pc(IdEx_pc_add, alu_output, pcsel, pf_pc);
 
@@ -143,15 +154,15 @@ module topmodule(
     
     adder pc_4(pc_out, 32'd4, 1'b0, pc_add, pc_add_cout);
     
-    imem instruction_memory(pc_out, instr);
+    imem_cache instruction_memory(clk, rst, pc_out, instr, icache_hit);
 
     bpb branch_predictor(clk, rst, taken_branch, IdEx_pc_out, IdEx_branch, pc_out, branch_pred);
     
-    btb branch_target_buffer(clk, rst, ExMa_alu_output, ExMa_pc_out, pc_out, ExMa_branch, btb_out, hit);
+    btb branch_target_buffer(clk, rst, ExMa_alu_output, ExMa_pc_out, pc_out, ExMa_branch, btb_out, btb_hit);
     
     assign pred_target = ExMa_alu_output;
 
-    IfId IfId_reg(clk, rst||flush, pc_out, pc_add, instr, hit&&branch_pred, pred_target, IfId_write, IfId_pc_out, IfId_pc_add, IfId_instr, IfId_pred_taken, IfId_pred_target);
+    IfId IfId_reg(clk, rst||flush, pc_out, pc_add, instr, btb_hit&&branch_pred, pred_target, IfId_write, IfId_pc_out, IfId_pc_add, IfId_instr, IfId_pred_taken, IfId_pred_target);
     
     //information decode
     
@@ -163,7 +174,7 @@ module topmodule(
     assign branch = (IfId_instr[6:0] == 7'b1100011);
     assign jump = (IfId_instr[6:0] == 7'b1101111 || IfId_instr[6:0] == 7'b1100111);
     
-    IdEx IdEx_reg(clk, rst||stall||flush, dataA, dataB, imm_instr, IfId_pc_out, IfId_pc_add, funct3, IfId_instr[11:7], IfId_instr[19:15], IfId_instr[24:20], regwen, asel, bsel, alusel, memrw, wbsel, branch, jump, memread, IfId_pred_taken, IfId_pred_target,
+    IdEx IdEx_reg(clk, rst||stall||flush, dataA, dataB, imm_instr, IfId_pc_out, IfId_pc_add, funct3, IfId_instr[11:7], IfId_instr[19:15], IfId_instr[24:20], regwen, asel, bsel, alusel, memrw, wbsel, branch, jump, memread, IfId_pred_taken, IfId_pred_target, IdEx_write,
     IdEx_dataA, IdEx_dataB, IdEx_imm_instr, IdEx_pc_out, IdEx_pc_add, IdEx_funct3, IdEx_addrd, IdEx_addra, IdEx_addrb, IdEx_regwen, IdEx_asel, IdEx_bsel, IdEx_alusel, IdEx_memrw, IdEx_wbsel, IdEx_branch, IdEx_jump, IdEx_memread, IdEx_pred_taken, IdEx_pred_target);
     
     //information excecute
@@ -178,14 +189,14 @@ module topmodule(
     
     assign pcsel = IdEx_jump || (IdEx_branch && taken_branch);
     
-    ExMa ExMa_reg(clk, rst, alu_output, b_selin, IdEx_memrw, IdEx_addrd, IdEx_regwen, IdEx_pc_add, IdEx_pc_out, IdEx_wbsel, taken_branch, IdEx_branch, IdEx_memread, IdEx_pred_taken, IdEx_pred_target,
+    ExMa ExMa_reg(clk, rst, alu_output, b_selin, IdEx_memrw, IdEx_addrd, IdEx_regwen, IdEx_pc_add, IdEx_pc_out, IdEx_wbsel, taken_branch, IdEx_branch, IdEx_memread, IdEx_pred_taken, IdEx_pred_target, ExMa_write,
     ExMa_alu_output, ExMa_datab, ExMa_memrw, ExMa_addrd, ExMa_regwen, ExMa_pc_add, ExMa_pc_out, ExMa_wbsel, ExMa_taken_branch, ExMa_branch, ExMa_memread, ExMa_pred_taken, ExMa_pred_target);
     
     //memory access
     
-    dmem data_memory(clk, ExMa_alu_output, ExMa_datab, ExMa_memrw, dataR);
+    dmem_cache data_memory(clk, rst, ExMa_alu_output, ExMa_datab, ExMa_memrw, dataR, dcache_hit);
     
-    MaWb MaWb_reg(clk, rst, ExMa_addrd, dataR, ExMa_alu_output, ExMa_pc_add, ExMa_wbsel, ExMa_regwen,
+    MaWb MaWb_reg(clk, rst, ExMa_addrd, dataR, ExMa_alu_output, ExMa_pc_add, ExMa_wbsel, ExMa_regwen, MaWb_write,
     MaWb_addrd, MaWb_datar, MaWb_alu_output, MaWb_pc_add, MaWb_wbsel, MaWb_regwen);
     
     //writeback

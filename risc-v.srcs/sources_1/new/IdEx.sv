@@ -36,6 +36,7 @@ module IdEx(
     input memread,
     input pred_taken,
     input [31:0] pred_target,
+    input IdEx_write,
     
     output reg [31:0] IdEx_dataA, IdEx_dataB,
     output reg [31:0] IdEx_imm_instr,
@@ -77,26 +78,28 @@ module IdEx(
             IdEx_pred_target <= 32'd0;
         end
         else begin
-            IdEx_dataA <= dataA;
-            IdEx_dataB <= dataB;
-            IdEx_imm_instr <= imm_instr;
-            IdEx_pc_out <= pc_out;
-            IdEx_pc_add <= pc_add;
-            IdEx_funct3 <= funct3;
-            IdEx_addrd <= addrd;
-            IdEx_addra <= addra;
-            IdEx_addrb <= addrb;
-            IdEx_regwen <= regwen;
-            IdEx_asel <= asel;
-            IdEx_bsel <= bsel;
-            IdEx_alusel <= alusel;
-            IdEx_memrw <= memrw;
-            IdEx_wbsel <= wbsel;
-            IdEx_branch <= branch;
-            IdEx_jump <= jump;
-            IdEx_memread <= memread;
-            IdEx_pred_taken <= pred_taken;
-            IdEx_pred_target <= pred_target;
+            if(IdEx_write) begin
+                IdEx_dataA <= dataA;
+                IdEx_dataB <= dataB;
+                IdEx_imm_instr <= imm_instr;
+                IdEx_pc_out <= pc_out;
+                IdEx_pc_add <= pc_add;
+                IdEx_funct3 <= funct3;
+                IdEx_addrd <= addrd;
+                IdEx_addra <= addra;
+                IdEx_addrb <= addrb;
+                IdEx_regwen <= regwen;
+                IdEx_asel <= asel;
+                IdEx_bsel <= bsel;
+                IdEx_alusel <= alusel;
+                IdEx_memrw <= memrw;
+                IdEx_wbsel <= wbsel;
+                IdEx_branch <= branch;
+                IdEx_jump <= jump;
+                IdEx_memread <= memread;
+                IdEx_pred_taken <= pred_taken;
+                IdEx_pred_target <= pred_target;
+            end
         end
     end
 
