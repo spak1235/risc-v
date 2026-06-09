@@ -26,6 +26,8 @@ module data_cache(
     input [31:0] dataw,
     input [31:0] data_mem,
     input memrw,
+    input [2:0] load_sel,
+    input [1:0] store_sel,
 
     output [31:0] datar,
     output hit,
@@ -39,9 +41,19 @@ module data_cache(
     reg [0:0] valid [15:0];
     reg [0:0] dirty [15:0];
 
+    wire [1:0] offset;
+
+    assign offset = addr[1:0];
+
     assign hit =  valid[addr[5:2]] && (cache_tag[addr[5:2]] == (addr>>6));
 
-    assign datar = (hit) ? dmem_cache[addr[5:2]] : 32'hXXXXXXXX;
+    assign datar = (hit) ?
+        ((load_sel == 3'b000) ? {{24{dmem_cache[addr[5:2]][8*offset + 7]}}, dmem_cache[addr[5:2]][8*offset +: 8]} :
+        (load_sel == 3'b001) ? {{16{dmem_cache[addr[5:2]][16*addr[1] + 15]}}, dmem_cache[addr[5:2]][16*addr[1] +: 16]} :
+        (load_sel == 3'b010) ? dmem_cache[addr[5:2]] :
+        (load_sel == 3'b100) ? {24'd0, dmem_cache[addr[5:2]][8*offset +: 8]} :
+        (load_sel == 3'b101) ? {16'd0, dmem_cache[addr[5:2]][16*addr[1] +: 16]} :
+        32'hXXXXXXXX) : 32'hXXXXXXXX;
 
     integer i;
 
@@ -70,7 +82,11 @@ module data_cache(
             end
             else begin
                 if(memrw) begin
-                    dmem_cache[addr[5:2]] <= dataw;
+                    case(store_sel) 
+                        2'b00 : dmem_cache[addr[5:2]][8*offset +: 8] <= dataw[7:0];
+                        2'b01 : dmem_cache[addr[5:2]][16*addr[1] +: 16] <= dataw[15:0];
+                        2'b10 : dmem_cache[addr[5:2]] <= dataw;
+                    endcase
                     dirty[addr[5:2]] <= 1'b1;
                 end
             end

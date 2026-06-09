@@ -32,6 +32,6 @@ module immgen(
     (immsel == 3'b010) ? (instr[31] == 1'b1) ? {19'h7FFFF, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0} : {19'd0, instr[31], instr[7], instr[30:25], instr[11:8], 1'b0}:
     (immsel == 3'b011) ? {instr[31:12], 12'b0}:
     (immsel == 3'b100) ? (instr[31] == 1'b1) ? {11'h7FF, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0} : {11'd0, instr[31], instr[19:12], instr[20], instr[30:21], 1'b0}:
-    32'bX;
+    32'd0;
     
 endmodule

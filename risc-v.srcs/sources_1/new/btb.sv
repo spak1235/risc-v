@@ -26,35 +26,31 @@ module btb(
     input [31:0] prev_pc,
     input [31:0] pc,
     input ex_branch,
-
     output [31:0] pc_out,
     output hit
     );
 
-    reg valid [15:0];
-    reg [25:0] tag [15:0];
+    reg valid    [15:0];
+    reg [25:0] tag     [15:0];
     reg [31:0] btb_table [15:0];
 
-    assign pc_out = (hit) ? btb_table[pc[5:2]] : 32'd0;
-    assign hit = valid[pc[5:2]] && (tag[pc[5:2]]==pc[31:6]);
+    assign hit    = valid[pc[5:2]] && (tag[pc[5:2]] == pc[31:6]);
+    assign pc_out = hit ? btb_table[pc[5:2]] : 32'd0;  // fix: was conditional on hit but hit wasn't yet computed cleanly
 
     integer i;
-
-    always@(posedge clk) begin
-        if(rst) begin
-            for(i = 0; i < 16; i = i + 1'b1) begin
+    always @(posedge clk) begin
+        if (rst) begin
+            for (i = 0; i < 16; i = i + 1'b1) begin
                 btb_table[i] <= 32'd0;
-                tag[i] <= 26'd0;
-                valid[i] <= 1'b0;
+                tag[i]       <= 26'd0;
+                valid[i]     <= 1'b0;
             end
-        end
-        else begin
-            if(ex_branch) begin
+        end else begin
+            if (ex_branch) begin
                 btb_table[prev_pc[5:2]] <= alu_output;
-                tag[prev_pc[5:2]] <= prev_pc[31:6];
-                valid[prev_pc[5:2]] <= 1'b1;
+                tag[prev_pc[5:2]]       <= prev_pc[31:6];
+                valid[prev_pc[5:2]]     <= 1'b1;
             end
         end
     end
-
 endmodule

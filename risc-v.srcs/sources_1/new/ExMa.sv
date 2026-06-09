@@ -25,6 +25,8 @@ module ExMa(
     input [31:0] alu_output,
     input [31:0] datab,
     input memrw,
+    input [2:0] load_sel,
+    input [1:0] store_sel,
     input [4:0] addrd,
     input regwen,
     input [31:0] pc_add,
@@ -35,11 +37,14 @@ module ExMa(
     input memread,
     input pred_taken,
     input [31:0] pred_target,
+    input jump,
     input ExMa_write,
     
     output reg [31:0] ExMa_alu_output,
     output reg [31:0] ExMa_datab,
     output reg ExMa_memrw,
+    output reg [2:0] ExMa_load_sel,
+    output reg [1:0] ExMa_store_sel,
     output reg [4:0] ExMa_addrd,
     output reg ExMa_regwen,
     output reg [31:0] ExMa_pc_add,
@@ -49,10 +54,11 @@ module ExMa(
     output reg ExMa_branch,
     output reg ExMa_memread,
     output reg ExMa_pred_taken,
-    output reg [31:0] ExMa_pred_target
+    output reg [31:0] ExMa_pred_target,
+    output reg ExMa_jump
     );
     
-    always@(posedge clk) begin
+    always@(posedge clk or posedge rst) begin
         if(rst) begin
             ExMa_alu_output <= 32'd0;
             ExMa_datab <= 32'd0;
@@ -67,6 +73,9 @@ module ExMa(
             ExMa_memread <= 1'b0;
             ExMa_pred_taken <= 1'b0;
             ExMa_pred_target <= 32'd0;
+            ExMa_load_sel <= 3'b000;
+            ExMa_store_sel <= 2'b00;
+            ExMa_jump <= 1'b0;
         end
         else begin
             if(ExMa_write) begin
@@ -83,6 +92,9 @@ module ExMa(
                 ExMa_memread <= memread;
                 ExMa_pred_taken <= pred_taken;
                 ExMa_pred_target <= pred_target;
+                ExMa_load_sel <= load_sel;
+                ExMa_store_sel <= store_sel;
+                ExMa_jump <= jump;
             end
         end
     end

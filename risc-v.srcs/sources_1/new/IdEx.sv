@@ -31,6 +31,8 @@ module IdEx(
     input asel, bsel,
     input [3:0] alusel,
     input memrw,
+    input [2:0] load_sel,
+    input [1:0] store_sel,
     input [1:0] wbsel,
     input branch, jump,
     input memread,
@@ -47,6 +49,8 @@ module IdEx(
     output reg IdEx_asel, IdEx_bsel,
     output reg [3:0] IdEx_alusel,
     output reg IdEx_memrw,
+    output reg [2:0] IdEx_load_sel,
+    output reg [1:0] IdEx_store_sel, 
     output reg [1:0] IdEx_wbsel,
     output reg IdEx_branch, IdEx_jump,
     output reg IdEx_memread,
@@ -54,7 +58,7 @@ module IdEx(
     output reg [31:0] IdEx_pred_target
     );
     
-    always@(posedge clk) begin
+    always@(posedge clk or posedge rst) begin
         if(rst) begin
             IdEx_dataA <= 32'd0;
             IdEx_dataB <= 32'd0;
@@ -70,6 +74,8 @@ module IdEx(
             IdEx_bsel <= 1'b0;
             IdEx_alusel <= 4'd0;
             IdEx_memrw <= 1'b0;
+            IdEx_load_sel <= 3'b000;
+            IdEx_store_sel <= 2'b00;
             IdEx_wbsel <= 2'b00;
             IdEx_branch <= 1'b0;
             IdEx_jump <= 1'b0;
@@ -93,6 +99,8 @@ module IdEx(
                 IdEx_bsel <= bsel;
                 IdEx_alusel <= alusel;
                 IdEx_memrw <= memrw;
+                IdEx_load_sel <= load_sel;
+                IdEx_store_sel <= store_sel;
                 IdEx_wbsel <= wbsel;
                 IdEx_branch <= branch;
                 IdEx_jump <= jump;

@@ -38,7 +38,7 @@ module MaWb(
     output reg MaWb_regwen
     );
     
-    always@(posedge clk) begin
+    always@(posedge clk or posedge rst) begin
         if(rst) begin
             MaWb_addrd <= 5'd0;
             MaWb_datar <= 32'd0;

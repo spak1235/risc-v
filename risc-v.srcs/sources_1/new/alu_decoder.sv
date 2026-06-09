@@ -49,7 +49,7 @@ module alu_decoder(
             7'b0010011: begin
                 case (funct3)
                     3'b000: temp_alusel = 4'h0;
-                    3'b001: temp_alusel = 4'h5;
+                    3'b001: temp_alusel = (funct7 == 7'b0000000) ? 4'h5 : 4'hX;
                     3'b010: temp_alusel = 4'h8;
                     3'b011: temp_alusel = 4'h9;
                     3'b100: temp_alusel = 4'h2;

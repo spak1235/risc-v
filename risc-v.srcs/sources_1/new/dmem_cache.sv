@@ -25,6 +25,8 @@ module dmem_cache(
     input [31:0] addr,
     input [31:0] dataw,
     input memrw,
+    input [2:0] load_sel,
+    input [1:0] store_sel,
     
     output [31:0] datar,
     output hit
@@ -34,7 +36,7 @@ module dmem_cache(
     wire [31:0] mem_data;
     wire rep_valid;
 
-    data_cache data_cache(clk, rst, addr, dataw, mem_data, memrw, datar, hit, rep_addr, rep_data, rep_valid);
+    data_cache data_cache(clk, rst, addr, dataw, mem_data, memrw, load_sel, store_sel, datar, hit, rep_addr, rep_data, rep_valid);
 
     data_mem data_mem(clk, rst, addr, rep_valid, rep_addr, rep_data, mem_data);
 endmodule

@@ -32,7 +32,9 @@ module control_unit(
     output [3:0] alusel,
     output memrw,
     output [1:0] wbsel,
-    output memread
+    output memread,
+    output [2:0] load_sel,
+    output [1:0] store_sel
 );
 
     wire [6:0] opcode = instr[6:0];
@@ -63,5 +65,9 @@ module control_unit(
     assign asel = (opcode == 7'b0010111 || opcode == 7'b1100011 || opcode == 7'b1101111) ? 1'b1 : 1'b0;
     
     assign memread = (opcode == 7'b0000011) ? 1'b1 : 1'b0;
+
+    assign load_sel = (opcode == 7'b0000011) ? funct3 : 3'b010;
+
+    assign store_sel = (opcode == 7'b0100011) ? funct3[1:0] : 2'b10;
 
 endmodule
