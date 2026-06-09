@@ -1,154 +1,167 @@
-# 5-Stage Pipelined RV32I RISC-V Processor with Dynamic Branch Prediction
+# RV32I 5-Stage Pipelined RISC-V Processor
 
-A fully functional 32-bit 5-stage pipelined RISC-V processor designed and implemented in Verilog HDL.  
-The processor supports pipelined execution, hazard handling, dynamic branch prediction, speculative fetch, and memory operations following the RV32I ISA specification.
+A fully synthesizable 32-bit RV32I RISC-V processor implemented in Verilog HDL featuring a classic 5-stage pipeline, dynamic branch prediction, instruction and data caches, hazard resolution, and FPGA deployment on a Xilinx Artix-7 device.
 
 ![architecture](./Images/architechture.png)
----
-
-# Features
-
-## 5-Stage Pipeline Architecture
-
-- Instruction Fetch (IF)
-- Instruction Decode (ID)
-- Execute (EX)
-- Memory Access (MEM)
-- Write Back (WB)
 
 ---
 
-# RV32I Instruction Support
+# Overview
 
-## Arithmetic Instructions
+This project implements a complete RV32I processor with:
 
+- 5-stage pipelined datapath
+- Dynamic branch prediction
+- Branch Target Buffer (BTB)
+- Instruction cache
+- Data cache
+- Data forwarding network
+- Hazard detection and recovery
+- FPGA timing closure and hardware validation
+
+The processor supports speculative execution through branch prediction and includes mechanisms for handling data, control, and memory hazards.
+
+---
+
+# RV32I ISA Support
+
+The processor implements the complete RV32I Base Integer Instruction Set Architecture.
+
+## Supported Instructions
+
+### Arithmetic
 ```assembly
 add
 sub
 addi
-slt
-sltu
 ```
 
-## Logical Instructions
-
+### Logical
 ```assembly
 and
 or
 xor
+andi
+ori
+xori
+```
+
+### Shift
+```assembly
 sll
 srl
 sra
+slli
+srli
+srai
 ```
 
-## Memory Instructions
-
+### Comparison
 ```assembly
+slt
+sltu
+slti
+sltiu
+```
+
+### Load Instructions
+```assembly
+lb
+lh
 lw
+lbu
+lhu
+```
+
+### Store Instructions
+```assembly
+sb
+sh
 sw
 ```
 
-## Control Flow Instructions
-
+### Branch Instructions
 ```assembly
 beq
 bne
 blt
 bge
+bltu
+bgeu
+```
+
+### Jump Instructions
+```assembly
 jal
 jalr
 ```
 
+### Upper Immediate Instructions
+```assembly
+lui
+auipc
+```
+
 ---
 
-# Hazard Handling
+# Hazard Resolution
 
-## Data Hazard Resolution
+## Data Hazards
 
-Implemented using:
-- EX/MEM Forwarding
-- MEM/WB Forwarding
-- Store Data Forwarding
+Implemented through:
 
-## Load-Use Hazard Detection
+- EX/MEM forwarding
+- MEM/WB forwarding
+- Store-data forwarding
 
-Implemented using:
-- Pipeline Stalling
-- PC Freeze
-- IF/ID Freeze
-- Bubble Injection into ID/EX
+## Load-Use Hazards
 
-## Control Hazard Handling
+Handled using:
 
-Implemented using:
-- Pipeline Flush Logic
-- Branch Recovery Mechanism
-- Speculative Fetch Cancellation
+- Pipeline stalling
+- PC freeze
+- IF/ID freeze
+- Bubble insertion
+
+## Control Hazards
+
+Handled through:
+
+- Dynamic branch prediction
+- Branch target prediction
+- Pipeline flushing
+- Speculative execution recovery
 
 ---
 
 # Dynamic Branch Prediction
 
-The processor implements dynamic branch prediction to reduce branch penalties and improve pipeline performance.
+The processor uses a two-level branch prediction system.
 
-## Branch Prediction Components
+## Branch Prediction Buffer (BPB)
 
-### Branch Prediction Buffer (BPB)
+- 16-entry predictor table
+- 2-bit saturating counters
+- Dynamic predictor training
+- Per-branch prediction history
 
-- 16-entry 2-bit saturating branch predictor
-- Dynamically learns branch behavior
-- Uses per-branch prediction states
-
-### Branch Target Buffer (BTB)
-
-- 16-entry Branch Target Buffer
-- Stores predicted target addresses
-- Includes valid bits and tag matching
-- Prevents false target predictions caused by aliasing
-
-### Speculative Fetch
-
-- Predicted target instructions are fetched before branch resolution
-- Incorrect predictions trigger pipeline flush and recovery
-
----
-
-# Pipeline Registers
-
-- IF/ID Register
-- ID/EX Register
-- EX/MEM Register
-- MEM/WB Register
-
----
-
-# Additional Modules
-
-- Control Unit
-- ALU Decoder
-- Immediate Generator
-- Register File
-- Instruction Memory
-- Data Memory
-- Hazard Detection Unit
-- Forwarding Unit
-- Branch Comparator
-- Branch Prediction Buffer (BPB)
-- Branch Target Buffer (BTB)
-
----
-
-# Pipeline Architecture
+State machine:
 
 ```text
-IF -> ID -> EX -> MEM -> WB
+00 Strongly Not Taken
+01 Weakly Not Taken
+10 Weakly Taken
+11 Strongly Taken
 ```
 
-The processor implements a classic pipelined datapath with hazard mitigation and speculative control flow execution.
+## Branch Target Buffer (BTB)
 
----
+- 16-entry BTB
+- Valid bits
+- Tag matching
+- Predicted target addresses
 
-# Branch Prediction Architecture
+## Speculative Fetch
 
 ```text
 PC
@@ -157,115 +170,184 @@ PC
 BTB + BPB
  │
  ▼
-Predicted Next PC
+Predicted PC
  │
  ▼
-Pipeline Fetch
+Instruction Fetch
  │
  ▼
-Branch Resolution in EX Stage
+Branch Resolution
  │
- ├── Correct Prediction  -> Continue
- └── Misprediction       -> Flush + Redirect PC
+ ├── Correct Prediction
+ │      └── Continue Execution
+ │
+ └── Misprediction
+        └── Flush + Redirect
 ```
 
 ---
 
-# Example Instructions
+# Cache Architecture
 
-```assembly
-addi x1, x0, 5
-addi x2, x0, 10
-add  x3, x1, x2
-sub  x4, x2, x1
+## Instruction Cache
 
-lw   x5, 0(x0)
-sw   x5, 4(x0)
+- Direct-mapped cache
+- Integrated with pipeline stall logic
+- Supports speculative instruction fetch
 
-beq  x1, x2, label
-bne  x3, x4, loop
+## Data Cache
 
-jal  x0, target
-jalr x0, x1, 0
+- Direct-mapped cache
+- Load/store support
+- Pipeline-aware memory stalling
+
+---
+
+## Verification
+
+The processor was verified using:
+
+- Directed instruction-level testbenches
+- Hazard stress tests
+- Branch prediction stress tests
+- Nested loop execution tests
+- Cache access verification
+- Full RV32I instruction validation
+
+### Branch Prediction Results
+
+| Metric | Result |
+|----------|----------|
+| Branches Executed | 1404 |
+| Mispredictions | 23 |
+| Prediction Accuracy | 98.36% |
+
+### FPGA Validation
+
+Successfully synthesized and implemented on a Xilinx Artix-7 XC7A200T FPGA with timing closure achieved at 133 MHz.
+
+
+---
+
+# FPGA Implementation
+
+## Target Device
+
+```text
+Xilinx Artix-7 XC7A200T
 ```
 
----
-
-# Verification and Testing
-
-The processor was verified using custom Verilog testbenches covering:
-
-- Arithmetic operations
-- Memory operations
-- Data hazards
-- Forwarding paths
-- Load-use stalls
-- Branch hazards
-- Branch prediction training
-- BTB hit/miss behavior
-- Pipeline flush recovery
-- Nested and loop branches
-
----
-
-## FPGA Validation
-
-The processor was synthesized and implemented on a Xilinx Artix-7 XC7A200T FPGA. Timing closure was achieved at 125 MHz with positive setup and hold slack.
-
-# FPGA Implementation Results
-
-Target Device:
-- Xilinx Artix-7 XC7A200T
-
-## Timing Performance
+## Timing Results
 
 | Metric | Value |
 |----------|----------|
-| Target Frequency | 125 MHz |
-| Achieved Fmax | ~126 MHz |
-| Worst Negative Slack (WNS) | +0.085 ns |
-| Total Negative Slack (TNS) | 0 ns |
-| Timing Closure | Passed |
+| Target Frequency | 133 MHz |
+| Clock Period | 7.5 ns |
+| Worst Setup Slack (WNS) | +0.079 ns |
+| Total Negative Slack (TNS) | 0.000 ns |
+| Worst Hold Slack (WHS) | +0.084 ns |
+| Timing Closure | PASS |
 
-## Resource Utilization
+Estimated maximum operating frequency:
 
-| Resource | Utilization |
-|----------|------------|
-| LUTs | 1295 |
-| Flip-Flops | 1490 |
-| BRAM | 0.5 |
+```text
+~135 MHz
+```
+
+---
+
+# FPGA Resource Utilization
+
+| Resource | Usage |
+|----------|----------|
+| LUTs | 2004 |
+| Flip-Flops | 2158 |
+| BRAM | 0 |
 | DSP | 0 |
 
-## Power Consumption
+---
+
+# Power Consumption
 
 | Metric | Value |
 |----------|----------|
-| Total On-Chip Power | 0.236 W |
-| Dynamic Power | 0.105 W |
-| Static Power | 0.131 W |
+| Total On-Chip Power | 0.153 W |
+
+---
+
+# Compliance and Stress Testing
+
+The processor was validated using:
+
+- ISA execution tests
+- Loop-intensive branch prediction benchmarks
+- Nested branch workloads
+- JAL/JALR execution tests
+- Cache interaction tests
+- Long-running pipeline stress tests
+
+Observed branch prediction accuracy:
+
+```text
+~98%
+```
+
+on loop-dominated workloads.
+
+---
+
+# Key Design Challenges
+
+- Designing a forwarding network without combinational loops
+- Resolving load-use hazards while maintaining pipeline throughput
+- Implementing BTB/BPB-based speculative execution
+- Recovering correctly from branch mispredictions
+- Handling cache-induced stalls
+- Debugging pipeline flush timing issues caused by synchronous squashing
+- Achieving timing closure above 133 MHz on Artix-7 FPGA
+
+---
 
 # FPGA Reports
 
 ## Device Utilization
 
-![Utilization](./Images/125MHz_impl/design_run.png)
+![Utilization](./Images/133MHz_impl_post_compliance/design.png)
 
 ## Timing Report
 
-![Timing](./Images/125MHz_impl/timing.png)
+![Timing](./Images/133MHz_impl_post_compliance/timing.png)
 
 ## Power Report
 
-![Power](./Images/125MHz_impl/power.png)
+![Power](./Images/133MHz_impl_post_compliance/power.png)
+
+---
 
 # Project Status
 
-Completed implementation of a fully hazard-aware 5-stage pipelined RV32I processor featuring:
+| Component | Status |
+|------------|----------|
+| RV32I ISA Implementation | Complete |
+| 5-Stage Pipeline | Complete |
+| Forwarding Unit | Verified |
+| Hazard Detection Unit | Verified |
+| Dynamic Branch Predictor | Verified |
+| Branch Target Buffer | Verified |
+| Instruction Cache | Verified |
+| Data Cache | Verified |
+| FPGA Implementation | Complete |
+| Timing Closure @ 133 MHz | Passed |
+| Compliance Testing | Passed |
+| Stress Testing | Passed |
 
-- Forwarding
-- Stalling
-- Pipeline Flushing
-- Dynamic Branch Prediction
-- BTB-based Target Prediction
-- 2-bit Saturating BPB
-- Speculative Fetch and Recovery
+---
+
+## Performance Summary
+
+- 5-stage RV32I pipeline
+- Dynamic branch prediction (16-entry BTB + 2-bit BPB)
+- Instruction and data caches
+- ~98% branch prediction accuracy on loop-heavy workloads
+- Timing closure achieved at 133 MHz on XC7A200T
+- Fully FPGA-synthesizable design
