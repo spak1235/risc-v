@@ -1,0 +1,231 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date         : Tue Jun  9 21:46:16 2026
+| Host         : shootout running 64-bit Ubuntu 24.04.4 LTS
+| Command      : report_methodology -file topmodule_methodology_drc_routed.rpt -pb topmodule_methodology_drc_routed.pb -rpx topmodule_methodology_drc_routed.rpx
+| Design       : topmodule
+| Device       : xc7a200tfbg676-2
+| Speed File   : -2
+| Design State : Fully Routed
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+             Max checks: <unlimited>
+             Checks found: 35
++-----------+----------+-------------------------------+--------+
+| Rule      | Severity | Description                   | Checks |
++-----------+----------+-------------------------------+--------+
+| LUTAR-1   | Warning  | LUT drives async reset alert  | 2      |
+| TIMING-18 | Warning  | Missing input or output delay | 33     |
++-----------+----------+-------------------------------+--------+
+
+2. REPORT DETAILS
+-----------------
+LUTAR-1#1 Warning
+LUT drives async reset alert  
+LUT cell ExMa_reg/IdEx_addrd[4]_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) IdEx_reg/IdEx_pred_target_reg[2]/CLR,
+IdEx_reg/IdEx_pred_target_reg[30]/CLR,
+IdEx_reg/IdEx_pred_target_reg[31]/CLR,
+IdEx_reg/IdEx_pred_target_reg[3]/CLR, IdEx_reg/IdEx_pred_target_reg[4]/CLR,
+IdEx_reg/IdEx_pred_target_reg[5]/CLR, IdEx_reg/IdEx_pred_target_reg[6]/CLR,
+IdEx_reg/IdEx_pred_target_reg[7]/CLR, IdEx_reg/IdEx_pred_target_reg[8]/CLR,
+IdEx_reg/IdEx_pred_target_reg[9]/CLR, IdEx_reg/IdEx_regwen_reg/CLR,
+IdEx_reg/IdEx_store_sel_reg[0]/CLR, IdEx_reg/IdEx_store_sel_reg[1]/CLR,
+IdEx_reg/IdEx_wbsel_reg[0]/CLR, IdEx_reg/IdEx_wbsel_reg[1]/CLR
+ (the first 15 of 223 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+LUTAR-1#2 Warning
+LUT drives async reset alert  
+LUT cell ExMa_reg/IfId_instr[30]_i_2, with 2 or more inputs, drives asynchronous preset/clear pin(s) IfId_reg/IfId_pred_target_reg[25]/CLR,
+IfId_reg/IfId_pred_target_reg[26]/CLR,
+IfId_reg/IfId_pred_target_reg[27]/CLR,
+IfId_reg/IfId_pred_target_reg[28]/CLR,
+IfId_reg/IfId_pred_target_reg[29]/CLR,
+IfId_reg/IfId_pred_target_reg[2]/CLR,
+IfId_reg/IfId_pred_target_reg[30]/CLR,
+IfId_reg/IfId_pred_target_reg[31]/CLR,
+IfId_reg/IfId_pred_target_reg[3]/CLR, IfId_reg/IfId_pred_target_reg[4]/CLR,
+IfId_reg/IfId_pred_target_reg[5]/CLR, IfId_reg/IfId_pred_target_reg[6]/CLR,
+IfId_reg/IfId_pred_target_reg[7]/CLR, IfId_reg/IfId_pred_target_reg[8]/CLR,
+IfId_reg/IfId_pred_target_reg[9]/CLR (the first 15 of 124 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+TIMING-18#1 Warning
+Missing input or output delay  
+An input delay is missing on rst relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#2 Warning
+Missing input or output delay  
+An output delay is missing on rout[0] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#3 Warning
+Missing input or output delay  
+An output delay is missing on rout[10] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#4 Warning
+Missing input or output delay  
+An output delay is missing on rout[11] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#5 Warning
+Missing input or output delay  
+An output delay is missing on rout[12] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#6 Warning
+Missing input or output delay  
+An output delay is missing on rout[13] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#7 Warning
+Missing input or output delay  
+An output delay is missing on rout[14] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#8 Warning
+Missing input or output delay  
+An output delay is missing on rout[15] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#9 Warning
+Missing input or output delay  
+An output delay is missing on rout[16] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#10 Warning
+Missing input or output delay  
+An output delay is missing on rout[17] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#11 Warning
+Missing input or output delay  
+An output delay is missing on rout[18] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#12 Warning
+Missing input or output delay  
+An output delay is missing on rout[19] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#13 Warning
+Missing input or output delay  
+An output delay is missing on rout[1] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#14 Warning
+Missing input or output delay  
+An output delay is missing on rout[20] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#15 Warning
+Missing input or output delay  
+An output delay is missing on rout[21] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#16 Warning
+Missing input or output delay  
+An output delay is missing on rout[22] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#17 Warning
+Missing input or output delay  
+An output delay is missing on rout[23] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#18 Warning
+Missing input or output delay  
+An output delay is missing on rout[24] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#19 Warning
+Missing input or output delay  
+An output delay is missing on rout[25] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#20 Warning
+Missing input or output delay  
+An output delay is missing on rout[26] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#21 Warning
+Missing input or output delay  
+An output delay is missing on rout[27] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#22 Warning
+Missing input or output delay  
+An output delay is missing on rout[28] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#23 Warning
+Missing input or output delay  
+An output delay is missing on rout[29] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#24 Warning
+Missing input or output delay  
+An output delay is missing on rout[2] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#25 Warning
+Missing input or output delay  
+An output delay is missing on rout[30] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#26 Warning
+Missing input or output delay  
+An output delay is missing on rout[31] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#27 Warning
+Missing input or output delay  
+An output delay is missing on rout[3] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#28 Warning
+Missing input or output delay  
+An output delay is missing on rout[4] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#29 Warning
+Missing input or output delay  
+An output delay is missing on rout[5] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#30 Warning
+Missing input or output delay  
+An output delay is missing on rout[6] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#31 Warning
+Missing input or output delay  
+An output delay is missing on rout[7] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#32 Warning
+Missing input or output delay  
+An output delay is missing on rout[8] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+TIMING-18#33 Warning
+Missing input or output delay  
+An output delay is missing on rout[9] relative to the rising and/or falling clock edge(s) of clk.
+Related violations: <none>
+
+

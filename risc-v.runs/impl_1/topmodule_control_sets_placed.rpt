@@ -1,0 +1,124 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
+---------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2025.2 (lin64) Build 6299465 Fri Nov 14 12:34:56 MST 2025
+| Date         : Tue Jun  9 21:45:16 2026
+| Host         : shootout running 64-bit Ubuntu 24.04.4 LTS
+| Command      : report_control_sets -verbose -file topmodule_control_sets_placed.rpt
+| Design       : topmodule
+| Device       : xc7a200t
+---------------------------------------------------------------------------------------------------------------------------------------------
+
+Control Set Information
+
+Table of Contents
+-----------------
+1. Summary
+2. Histogram
+3. Flip-Flop Distribution
+4. Detailed Control Set Information
+
+1. Summary
+----------
+
++----------------------------------------------------------+-------+
+|                          Status                          | Count |
++----------------------------------------------------------+-------+
+| Total control sets                                       |    46 |
+|    Minimum number of control sets                        |    46 |
+|    Addition due to synthesis replication                 |     0 |
+|    Addition due to physical synthesis replication        |     0 |
+| Unused register locations in slices containing registers |   210 |
++----------------------------------------------------------+-------+
+* Control sets can be merged at opt_design using control_set_merge or merge_equivalent_drivers
+** Run report_qor_suggestions for automated merging and remapping suggestions
+
+
+2. Histogram
+------------
+
++--------------------+-------+
+|       Fanout       | Count |
++--------------------+-------+
+| Total control sets |    46 |
+| >= 0 to < 4        |     0 |
+| >= 4 to < 6        |     0 |
+| >= 6 to < 8        |     0 |
+| >= 8 to < 10       |     0 |
+| >= 10 to < 12      |     0 |
+| >= 12 to < 14      |     0 |
+| >= 14 to < 16      |     0 |
+| >= 16              |    46 |
++--------------------+-------+
+* Control sets can be remapped at either synth_design or opt_design
+
+
+3. Flip-Flop Distribution
+-------------------------
+
++--------------+-----------------------+------------------------+-----------------+--------------+
+| Clock Enable | Synchronous Set/Reset | Asynchronous Set/Reset | Total Registers | Total Slices |
++--------------+-----------------------+------------------------+-----------------+--------------+
+| No           | No                    | No                     |              16 |            5 |
+| No           | No                    | Yes                    |               0 |            0 |
+| No           | Yes                   | No                     |              81 |           29 |
+| Yes          | No                    | No                     |               0 |            0 |
+| Yes          | No                    | Yes                    |             637 |          180 |
+| Yes          | Yes                   | No                     |            1424 |          453 |
++--------------+-----------------------+------------------------+-----------------+--------------+
+
+
+4. Detailed Control Set Information
+-----------------------------------
+
++----------------+---------------------------------------------------------------------+---------------------+------------------+----------------+--------------+
+|  Clock Signal  |                            Enable Signal                            |   Set/Reset Signal  | Slice Load Count | Bel Load Count | Bels / Slice |
++----------------+---------------------------------------------------------------------+---------------------+------------------+----------------+--------------+
+|  clk_IBUF_BUFG |                                                                     |                     |                5 |             16 |         3.20 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_10[0]                           | rst_IBUF            |                7 |             26 |         3.71 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_9[0]                            | rst_IBUF            |               10 |             26 |         2.60 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_4[0]                            | rst_IBUF            |                7 |             26 |         3.71 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[3]_rep_1[0]                            | rst_IBUF            |                5 |             26 |         5.20 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_11[0]                           | rst_IBUF            |                4 |             26 |         6.50 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_1[0]                            | rst_IBUF            |                9 |             26 |         2.89 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_12[0]                           | rst_IBUF            |                6 |             26 |         4.33 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_2[0]                            | rst_IBUF            |                8 |             26 |         3.25 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_3[0]                            | rst_IBUF            |                4 |             26 |         6.50 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_0[0]                            | rst_IBUF            |                7 |             26 |         3.71 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_5[0]                            | rst_IBUF            |                5 |             26 |         5.20 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_6[0]                            | rst_IBUF            |                5 |             26 |         5.20 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_7[0]                            | rst_IBUF            |               11 |             26 |         2.36 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[5]_rep_8[0]                            | rst_IBUF            |                9 |             26 |         2.89 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[2]_rep_2[0]                            | rst_IBUF            |                5 |             26 |         5.20 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_alu_output_reg[2]_rep_1[0]                            | rst_IBUF            |                7 |             26 |         3.71 |
+|  clk_IBUF_BUFG | ExMa_reg/dmem_cache                                                 |                     |                8 |             32 |         4.00 |
+|  clk_IBUF_BUFG | ExMa_reg/pc_write                                                   | rst_IBUF            |               22 |             40 |         1.82 |
+|  clk_IBUF_BUFG | data_memory/data_cache/rep_addr[9]_i_1_n_0                          | rst_IBUF            |               15 |             40 |         2.67 |
+|  clk_IBUF_BUFG | data_memory/data_cache/rep_valid_reg_1                              |                     |               11 |             44 |         4.00 |
+|  clk_IBUF_BUFG | data_memory/data_cache/rep_valid_reg_0                              |                     |               11 |             44 |         4.00 |
+|  clk_IBUF_BUFG | data_memory/data_cache/rep_addr_reg[9]_0                            |                     |               11 |             44 |         4.00 |
+|  clk_IBUF_BUFG | data_memory/data_cache/rep_addr_reg[8]_0                            |                     |               11 |             44 |         4.00 |
+|  clk_IBUF_BUFG | instruction_memory/instruction_cache/cache_tag_reg_0_15_0_0_i_1_n_0 |                     |               14 |             54 |         3.86 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_13[0]                                        | rst_IBUF            |               22 |             58 |         2.64 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_9[0]                                         | rst_IBUF            |               20 |             58 |         2.90 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_3[0]                                         | rst_IBUF            |               18 |             58 |         3.22 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_12[0]                                        | rst_IBUF            |               20 |             58 |         2.90 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_11[0]                                        | rst_IBUF            |               15 |             58 |         3.87 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_10[0]                                        | rst_IBUF            |               21 |             58 |         2.76 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_1[0]                                         | rst_IBUF            |               17 |             58 |         3.41 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_0[0]                                         | rst_IBUF            |               13 |             58 |         4.46 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_2[0]                                         | rst_IBUF            |               13 |             58 |         4.46 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_14[0]                                        | rst_IBUF            |               18 |             58 |         3.22 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_4[0]                                         | rst_IBUF            |               19 |             58 |         3.05 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_5[0]                                         | rst_IBUF            |               28 |             58 |         2.07 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_6[0]                                         | rst_IBUF            |               23 |             58 |         2.52 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_7[0]                                         | rst_IBUF            |               24 |             58 |         2.42 |
+|  clk_IBUF_BUFG | ExMa_reg/ExMa_jump_reg_8[0]                                         | rst_IBUF            |               20 |             58 |         2.90 |
+|  clk_IBUF_BUFG | ExMa_reg/E[0]                                                       | rst_IBUF            |               16 |             58 |         3.62 |
+|  clk_IBUF_BUFG |                                                                     | rst_IBUF            |               29 |             81 |         2.79 |
+| ~clk_IBUF_BUFG | MaWb_reg/p_0_in_0                                                   |                     |               11 |             88 |         8.00 |
+|  clk_IBUF_BUFG | ExMa_reg/pc_write                                                   | ExMa_reg/AR[0]      |               37 |            124 |         3.35 |
+|  clk_IBUF_BUFG | ExMa_reg/IdEx_write                                                 | ExMa_reg/rst010_out |               62 |            223 |         3.60 |
+|  clk_IBUF_BUFG | ExMa_reg/IdEx_write                                                 | rst_IBUF            |               81 |            290 |         3.58 |
++----------------+---------------------------------------------------------------------+---------------------+------------------+----------------+--------------+
+
+

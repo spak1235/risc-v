@@ -56,7 +56,11 @@ if {$::dispatch::connected} {
 }
 
 OPTRACE "synth_1" START { ROLLUP_AUTO }
+set_param checkpoint.writeSynthRtdsInDcp 1
+set_param chipscope.maxJobs 6
 set_param general.usePosixSpawnForFork 1
+set_msg_config -id {Synth 8-256} -limit 10000
+set_msg_config -id {Synth 8-638} -limit 10000
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a200tfbg676-2
 
@@ -77,10 +81,17 @@ read_mem {
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/data_mem.mem
 }
 read_verilog -library xil_defaultlib -sv {
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/mux4.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/ExMa.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/IdEx.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/IfId.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/MaWb.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/adder.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/alu.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/alu_decoder.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/bpb.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/branch_comparator.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/btb.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/control_unit.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/dmem.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/imem.sv
@@ -90,6 +101,12 @@ read_verilog -library xil_defaultlib -sv {
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/pc.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/regfile.sv
   /home/sohan/risc-v/risc-v.srcs/sources_1/new/topmodule.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/instr_cache.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/instr_mem.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/imem_cache.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/data_cache.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/data_mem.sv
+  /home/sohan/risc-v/risc-v.srcs/sources_1/new/dmem_cache.sv
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
@@ -100,7 +117,12 @@ OPTRACE "Adding files" END { }
 foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
   set_property used_in_implementation false $dcp
 }
+read_xdc /home/sohan/risc-v/risc-v.srcs/constrs_1/new/clock_constraint.xdc
+set_property used_in_implementation false [get_files /home/sohan/risc-v/risc-v.srcs/constrs_1/new/clock_constraint.xdc]
+
 set_param ips.enableIPCacheLiteLoad 1
+
+read_checkpoint -auto_incremental -incremental /home/sohan/risc-v/risc-v.srcs/utils_1/imports/synth_1/topmodule.dcp
 close [open __synthesis_is_running__ w]
 
 OPTRACE "synth_design" START { }
