@@ -203,6 +203,40 @@ Branch Resolution
 
 ---
 
+# Cache Performance Evaluation
+
+The processor was evaluated using a custom benchmark exercising arithmetic operations, control flow, memory accesses, and repeated instruction execution to analyze cache behavior.
+
+## Instruction Cache Performance
+
+| Metric | Value |
+|---------|------:|
+| Total Accesses | 1500 |
+| Cache Hits | 1469 |
+| Cache Misses | 31 |
+| Hit Rate | **97.93%** |
+
+## Data Cache Performance
+
+| Metric | Value |
+|---------|------:|
+| Total Accesses | 22 |
+| Load Operations | 10 |
+| Store Operations | 12 |
+| Cache Hits | 20 |
+| Cache Misses | 2 |
+| Hit Rate | **90.91%** |
+
+## Summary
+
+- 16-entry Direct-Mapped Instruction Cache
+- 16-entry Direct-Mapped Write-Back Data Cache
+- High instruction locality achieved a **97.93%** I-cache hit rate after warm-up.
+- Memory-intensive benchmark achieved a **90.91%** D-cache hit rate.
+- Cache misses correctly stalled the pipeline until memory accesses completed, while hits proceeded without additional latency.
+
+---
+
 ## Verification
 
 The processor was verified using:
