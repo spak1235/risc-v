@@ -351,3 +351,7 @@ on loop-dominated workloads.
 - ~98% branch prediction accuracy on loop-heavy workloads
 - Timing closure achieved at 133 MHz on XC7A200T
 - Fully FPGA-synthesizable design
+
+---
+
+**Repository:** https://github.com/spak1235/risc-v
